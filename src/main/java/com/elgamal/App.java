@@ -14,7 +14,7 @@ public class App {
 	private static Logger logger = Logger.getLogger(App.class.getName());
 	
     public static void main( String[] args ) {
-    	//initLaF();
+    	initLaF();
     	EventQueue.invokeLater(() -> {
 			EncryptView frame = new EncryptView();
 			frame.setVisible(true);

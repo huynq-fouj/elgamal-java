@@ -6,10 +6,18 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.elgamal.contexts.CypherContext;
+import com.elgamal.cypher.Elgamal;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
+import java.math.BigInteger;
+
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -23,36 +31,21 @@ public class DecryptView extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField inputXa;
-	private JTextField outputK;
-	private JTextField inputC1;
-	private JTextArea outputPlain;
-	private JTextArea inputC2;
+	private JTextArea inputC1;
+	private JTextArea inputXa;
+	private JTextArea outputM;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					DecryptView frame = new DecryptView();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public DecryptView() {
+		this("");
+	}
+	
+	public DecryptView(String C1) {
+		setCurrentFrame(this);
 		setTitle("Giải mã Elgamal");
 		setBackground(new Color(255, 255, 255));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 910, 591);
+		setBounds(100, 100, 819, 616);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -62,19 +55,14 @@ public class DecryptView extends JFrame {
 		JLabel lblGiiM = new JLabel("Giải mã");
 		lblGiiM.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
-		JLabel lblNewLabel_1_1 = new JLabel("Bản mã C1:");
+		JLabel lblNewLabel_1_1 = new JLabel("Bản mã:");
 		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		
-		JScrollPane scrollPane = new JScrollPane();
 		
 		JLabel lblNewLabel_1_1_1 = new JLabel("Khóa bí mật Xa:");
 		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
-		inputXa = new JTextField();
-		inputXa.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		inputXa.setColumns(10);
-		
 		JButton btnNewButton = new JButton("Giải mã");
+		btnNewButton.setBorder(new EmptyBorder(0, 0, 0, 0));
 		btnNewButton.setForeground(Color.WHITE);
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnNewButton.setFocusable(false);
@@ -82,119 +70,143 @@ public class DecryptView extends JFrame {
 		btnNewButton.addActionListener(e -> handleDecode());
 		
 		JButton btntLi = new JButton("Đặt lại");
+		btntLi.setBorder(new EmptyBorder(0, 0, 0, 0));
 		btntLi.setForeground(Color.WHITE);
 		btntLi.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btntLi.setFocusable(false);
 		btntLi.setBackground(Color.GRAY);
 		btntLi.addActionListener(e -> handleReset());
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		
 		JLabel lblNewLabel_1_1_2 = new JLabel("Bản rõ:");
 		lblNewLabel_1_1_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
-		JLabel lblNewLabel_1_1_2_1 = new JLabel("Số k:");
-		lblNewLabel_1_1_2_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		JScrollPane scrollPane_1 = new JScrollPane();
 		
-		outputK = new JTextField();
-		outputK.setEditable(false);
-		outputK.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		outputK.setColumns(10);
+		JScrollPane scrollPane_1_1 = new JScrollPane();
 		
-		inputC1 = new JTextField();
-		inputC1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		inputC1.setColumns(10);
-		
-		JLabel lblNewLabel_1_1_3 = new JLabel("Bản mã C2:");
-		lblNewLabel_1_1_3.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		JScrollPane scrollPane_1_1_1 = new JScrollPane();
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblNewLabel_1_1_2, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 743, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblNewLabel_1_1_2_1, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(outputK, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE))
+						.addComponent(lblGiiM, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblGiiM, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_1_1, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_1_1_3, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE))
+								.addComponent(lblNewLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblNewLabel_1_1_2, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblNewLabel_1_1, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE))
 							.addGap(10)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(btnNewButton)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(btntLi, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE))
-								.addComponent(inputXa, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)
+								.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE)
 								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-									.addComponent(scrollPane, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 752, GroupLayout.PREFERRED_SIZE)
-									.addComponent(inputC1, GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)))))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+									.addComponent(scrollPane_1_1_1, GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE)
+									.addComponent(scrollPane_1_1, GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE))))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btntLi, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(9, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblGiiM, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_1_1, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-						.addComponent(inputC1, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblNewLabel_1_1_3, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-							.addGap(57)))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(inputXa, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btntLi, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
-					.addGap(24)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_1_1_2_1, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-						.addComponent(outputK, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(67)
-							.addComponent(lblNewLabel_1_1_2, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
+							.addGap(34)
+							.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(scrollPane_1_1, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblGiiM, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
+							.addGap(102)
+							.addComponent(lblNewLabel_1_1, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+							.addGap(153)
+							.addComponent(lblNewLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(18)
-							.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(57, Short.MAX_VALUE))
+							.addComponent(scrollPane_1_1_1, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(81)
+							.addComponent(lblNewLabel_1_1_2, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btntLi, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
 		);
 		
-		outputPlain = new JTextArea();
-		outputPlain.setEditable(false);
-		outputPlain.setWrapStyleWord(true);
-		outputPlain.setLineWrap(true);
-		scrollPane_1.setViewportView(outputPlain);
+		outputM = new JTextArea();
+		outputM.setEditable(false);
+		outputM.setWrapStyleWord(true);
+		outputM.setLineWrap(true);
+		scrollPane_1_1_1.setViewportView(outputM);
 		
-		inputC2 = new JTextArea();
-		inputC2.setWrapStyleWord(true);
-		inputC2.setLineWrap(true);
-		scrollPane.setViewportView(inputC2);
+		inputXa = new JTextArea();
+		inputXa.setWrapStyleWord(true);
+		inputXa.setLineWrap(true);
+		scrollPane_1_1.setViewportView(inputXa);
+		
+		inputC1 = new JTextArea();
+		inputC1.setWrapStyleWord(true);
+		inputC1.setLineWrap(true);
+		scrollPane_1.setViewportView(inputC1);
+		inputC1.setText(C1);
 		contentPane.setLayout(gl_contentPane);
 	}
 	
-	private void handleDecode() {
+	private boolean checkValid() {
+		String C1 = inputC1.getText();
+		String strX = inputXa.getText();
+		if(C1 == null || C1.equals("")) {
+			JOptionPane.showConfirmDialog(this, "Bản mã không hợp lệ!", "Error",
+					JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
 		
+		if(strX == null || strX.equals("")) {
+			JOptionPane.showConfirmDialog(this, "Vui lòng nhập khóa bí mật!", "Error",
+					JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+			return false;
+		} else {	
+			try {
+				BigInteger x = new BigInteger(strX);
+			} catch(Exception e) {
+				JOptionPane.showConfirmDialog(this, "Khóa bí mật là số nguyên!", "Error",
+						JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	private void handleDecode() {
+		if(checkValid()) {
+			String C1 = inputC1.getText();
+			String strX = inputXa.getText();
+			BigInteger q = CypherContext.getPublicKey().getQ();
+			String M = Elgamal.decryptV2(C1, new BigInteger(strX), q);
+			outputM.setText(M);
+		}
 	}
 	
 	private void handleReset() {
-		
+		inputC1.setText("");
+		inputXa.setText("");
+		outputM.setText("");
+	}
+	
+	private static DecryptView view;
+	
+	public static DecryptView getCurrentFrame() {
+		return view;
+	}
+	
+	public static void setCurrentFrame(DecryptView v) {
+		view = v;
 	}
 	
 }
