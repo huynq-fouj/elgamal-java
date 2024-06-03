@@ -7,6 +7,6 @@
         "compile": "mvn compile",
         "start": "mvn exec:java",
         "dev": "mvn compile exec:java",
-        "build": "mvn clean install"
+        "clean": "mvn clean install"
     }
 }
