@@ -1,7 +1,6 @@
 package com.elgamal.views;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -21,7 +20,6 @@ import java.math.BigInteger;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.JButton;
 
 public class DecryptView extends JFrame {

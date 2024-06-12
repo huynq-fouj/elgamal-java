@@ -11,12 +11,9 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JTextField;
 import javax.swing.JButton;
-import java.awt.FlowLayout;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
-import java.awt.event.ActionListener;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
@@ -425,6 +422,7 @@ public class EncryptView extends JFrame {
 			BigInteger q = new BigInteger(strQ);
 			BigInteger a = new BigInteger(strA);
 			BigInteger x = new BigInteger(strX);
+			//Y = a ^ x mod q
 			BigInteger y = a.modPow(x, q);
 			CypherContext.setPublicKey(q, a, y);
 			CypherContext.setPrivateKey(x);
@@ -436,6 +434,7 @@ public class EncryptView extends JFrame {
 		BigInteger q = BigInteger.probablePrime(BITLENGTH, random);
 		BigInteger a = new BigInteger(BITLENGTH - 1, random);
 		BigInteger x = new BigInteger(BITLENGTH - 2, random);
+		//Y = a ^ x mod q
 		BigInteger y = a.modPow(x, q);
 		CypherContext.setPublicKey(q, a, y);
 		CypherContext.setPrivateKey(x);
