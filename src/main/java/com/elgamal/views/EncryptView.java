@@ -16,6 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 import javax.swing.border.TitledBorder;
@@ -69,7 +70,7 @@ public class EncryptView extends JFrame {
 		panel_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Decrypt", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		panel_1.setBackground(Color.WHITE);
 		
-		JButton btnGii = new JButton("Gửi đi");
+		JButton btnGii = new JButton("Giải mã");
 		btnGii.setForeground(Color.WHITE);
 		btnGii.setFont(new Font("Arial", Font.BOLD, 14));
 		btnGii.setFocusable(false);
@@ -494,22 +495,14 @@ public class EncryptView extends JFrame {
 	
 	private boolean checkBitLength(String message, BigInteger q) {
 		int qLength = q.bitLength();
-		int mLength = new BigInteger((message.charAt(0) + "").getBytes(StandardCharsets.UTF_8)).bitLength();
-		int vt = 0;
-		for(int i = 0; i < message.length(); i++) {
-			BigInteger M = new BigInteger((message.charAt(i) + "").getBytes(StandardCharsets.UTF_8));
-			if(M.bitLength() > mLength) {
-				mLength = M.bitLength();
-				vt = i;
-			}
-		}
-		
-		if(mLength > 7) {
-			mLength = new BigInteger((" " + message.charAt(vt)).getBytes(StandardCharsets.UTF_8)).bitLength();
+		int mLength = BigInteger.valueOf(message.charAt(0)).bitLength();
+		for(int i = 1; i < message.length(); i++) {
+			int bl = BigInteger.valueOf(message.charAt(i)).bitLength();
+			if(bl > mLength) mLength = bl;
 		}
 		
 		if(mLength >= qLength) {
-			JOptionPane.showConfirmDialog(this, "Kích thước số q ("+qLength+" bit) không đủ để mã hóa bản rõ (min q > "+mLength+" bit)!", "Error",
+			JOptionPane.showConfirmDialog(this, "Kích thước số q (" + qLength + " bit) không đủ để mã hóa bản rõ!\nYêu cầu: Số nguyên tố q phải ≥ " + (mLength + 1) + " bit.", "Error",
 					JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
@@ -525,7 +518,7 @@ public class EncryptView extends JFrame {
 				if(!checkBitLength(message, pk.getQ())) return;
 				if(checkK()) {
 					String strK = inputK.getText();
-					C = Elgamal.encryptV2(message, pk, new BigInteger(strK));
+						C = Elgamal.encrypt(message, pk, new BigInteger(strK));
 					outputC1.setText(C);
 				}
 			} else {
@@ -539,15 +532,11 @@ public class EncryptView extends JFrame {
 	}
 	
 	private void navigateDecryptView() {
-		String C = outputC1.getText();
-		if(C != null && !C.equals("")) {
-			DecryptView dv = DecryptView.getCurrentFrame();
-			if(dv != null) dv.dispose();
-			dv = new DecryptView(C);
-			dv.setVisible(true);
-		} else {
-			JOptionPane.showConfirmDialog(this, "Bản mã không hợp lệ!", "Error",
-					JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
-		}
+		String c = outputC1.getText();
+		// Xóa bớt frame nếu nó đã tồn tại
+		DecryptView dv = DecryptView.getCurrentFrame();
+		if(dv != null) dv.dispose();
+		dv = new DecryptView(c);
+		dv.setVisible(true);
 	}
 }

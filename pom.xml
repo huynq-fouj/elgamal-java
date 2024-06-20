@@ -6,10 +6,9 @@
 
   <groupId>com.elgamal</groupId>
   <artifactId>script</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
 
-  <name>script</name>
-  <!-- FIXME change it to the project's website -->
+  <name>Elgamal encryption GUI</name>
   <url>http://www.example.com</url>
 
   <properties>
@@ -78,20 +77,20 @@
           <version>3.0.0</version>
         </plugin>
         <plugin>
-			<groupId>org.codehaus.mojo</groupId>
-			<artifactId>exec-maven-plugin</artifactId>
-			<version>1.6.0</version>
-			<executions>
-				<execution>
-					<goals>
-						<goal>java</goal>
-					</goals>
-				</execution>
-			</executions>
-			<configuration>
-                 <mainClass>com.elgamal.App</mainClass>
-            </configuration>
-		</plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.6.0</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>java</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <mainClass>com.elgamal.App</mainClass>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>

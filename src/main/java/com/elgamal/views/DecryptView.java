@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JScrollPane;
@@ -186,7 +187,8 @@ public class DecryptView extends JFrame {
 			String C1 = inputC1.getText();
 			String strX = inputXa.getText();
 			BigInteger q = CypherContext.getPublicKey().getQ();
-			String M = Elgamal.decryptV2(C1, new BigInteger(strX), q);
+			String M = "";
+			M = Elgamal.decrypt(C1, new BigInteger(strX), q);
 			outputM.setText(M);
 		}
 	}

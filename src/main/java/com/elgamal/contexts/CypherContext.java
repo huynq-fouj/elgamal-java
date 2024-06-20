@@ -8,6 +8,7 @@ public class CypherContext {
 
 	private static PublicKey publicKey;
 	private static BigInteger privateKey;
+	private static String cypher;
 	
 	public static void setPublicKey(PublicKey key) {
 		publicKey = key;
@@ -27,6 +28,14 @@ public class CypherContext {
 	
 	public static BigInteger getPrivateKey() {
 		return privateKey;
+	}
+
+	public static String getCypher() {
+		return cypher;
+	}
+
+	public static void setCypher(String c) {
+		cypher = c;
 	}
 	
 }
