@@ -1,9 +1,11 @@
 package com.elgamal.cypher;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 
-public class PublicKey {
+public class PublicKey implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private BigInteger q;
 	private BigInteger a;
 	private BigInteger y;

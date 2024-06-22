@@ -2,6 +2,7 @@ package com.elgamal.contexts;
 
 import java.math.BigInteger;
 
+import com.elgamal.cypher.Encrypted;
 import com.elgamal.cypher.PublicKey;
 
 public class CypherContext {
@@ -9,6 +10,7 @@ public class CypherContext {
 	private static PublicKey publicKey;
 	private static BigInteger privateKey;
 	private static String cypher;
+	private static Encrypted encrypted;
 	
 	public static void setPublicKey(PublicKey key) {
 		publicKey = key;
@@ -36,6 +38,14 @@ public class CypherContext {
 
 	public static void setCypher(String c) {
 		cypher = c;
+	}
+	
+	public static Encrypted getEncrypted() {
+		return encrypted;
+	}
+
+	public static void setEmcrypted(Encrypted e) {
+		encrypted = e;
 	}
 	
 }

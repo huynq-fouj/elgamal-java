@@ -16,9 +16,9 @@ public class Elgamal {
     	BigInteger q = key.getQ();
     	BigInteger a = key.getA();
     	BigInteger y = key.getY();
-        //C1 = a ^ k mod q
+        // C1 = a ^ k mod q
         BigInteger c1 = a.modPow(k, q);
-        //K = y ^ k mod q
+        // K = y ^ k mod q
         BigInteger K = y.modPow(k, q);
 		String c2 = calculateC2(message, q, K);
 		return Base64.getEncoder().encodeToString(compressData(c1.toString() + ":" + c2));
@@ -65,6 +65,7 @@ public class Elgamal {
     		}
     	}
     	return out.toString();
+		//return decompressData(out.toString());
     }
 
 
